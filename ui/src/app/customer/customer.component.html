@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <h3>New Customer form</h3>
+  <form fxLayout="column" fxLayoutAlign="start" [formGroup]="addCustomerForm" fxFlex="1 0 auto" (ngSubmit)="save()">
+    <ul>
+      <li>
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Name" formControlName="name" required />
+          <mat-error *ngIf="name.hasError('required')">Name is required</mat-error>
+          <mat-error *ngIf="name.hasError('minlength')">Name must be of minimum 5 characters</mat-error>
+        </mat-form-field>
+      </li>
+      <li>
+        <mat-form-field appearance="fill">
+          <mat-label>Customer Type</mat-label>
+          <mat-select placeholder="Type" formControlName="type" required>
+            <mat-option *ngFor="let customerType of customerTypes" [value]="customerType.customerTypeId">
+              {{customerType.description}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="type.hasError('required')">Please choose a type</mat-error>
+        </mat-form-field>
+      </li>
+      <li>
+        <button type="submit" [disabled]="addCustomerForm.invalid" mat-raised-button color="primary">Save</button>
+      </li>
+    </ul>
+
+  </form>
+  <h4>Customers list</h4>
+  <table spacing="5" class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let customer of customers">
+        <td>{{customer.name}}</td>
+        <td>{{customer.customerType.description}}</td>
+        <td>
+          <a [routerLink]="['/customer', customer.customerId]">Open</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

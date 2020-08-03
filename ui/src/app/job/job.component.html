@@ -1,14 +1,23 @@
 <h2>New job form</h2>
 <form #jobForm="ngForm" (ngSubmit)="createJob(jobForm)">
   <label for="engineer">Engineer</label>
-  <select name="engineer" required #engineer="ngModel" ngModel placeholder="Please select" [(ngModel)]="newJob.engineer">
-    <option [ngValue]="undefined" selected>Please select</option>
-    <option *ngFor="let engineer of engineers">{{engineer}}</option>
+
+  <select name="engineerId" required #engineerId="ngModel" placeholder="Please select" [(ngModel)]="newJob.engineerId">
+    <option [ngValue]="null">Please select</option>
+    <option *ngFor="let engineer of engineers" [ngValue]="engineer.engineerId">{{engineer.name}}</option>
   </select>
-  <small *ngIf="engineer.invalid">Please select an engineer</small>
+  <small *ngIf="engineerId.touched && engineerId.invalid">Please select an engineer</small>
+
+  <label for="customer">Customer</label>
+  <select name="customerId" required #customerId="ngModel" placeholder="Please select" [(ngModel)]="newJob.customerId">
+    <option [ngValue]="null">Please select</option>
+    <option *ngFor="let customer of customers" [ngValue]="customer.customerId">{{customer.name}}</option>
+  </select>
+  <small *ngIf="customerId.touched && customerId.invalid">Please select an engineer</small>
+
   <label for="when">When</label>
   <input type="date" name="when" ngModel required #when="ngModel" [(ngModel)]="newJob.when" />
-  <small *ngIf="when.invalid">Please select a valid date</small>
+  <small *ngIf="when.touched && when.invalid">Please select a valid date</small>
   <button type="submit" [disabled]="jobForm.invalid">Add Job</button>
 </form>
 
@@ -17,14 +26,16 @@
   <thead>
     <tr>
       <th>Engineer</th>
+      <th>Customer</th>
       <th>When</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let job of jobs">
-      <td>{{job.engineer}}</td>
-      <td>{{job.when | date:'shortDate'}}</td>
+      <td>{{job.engineer.name}}</td>
+      <td>{{(job.customer==null)?"Unknown": job.customer.name}}</td>
+      <td>{{job.when | date:'dd/MM/yyyy'}}</td>
       <td>
         <a [routerLink]="['/job', job.jobId]">Open</a>
       </td>

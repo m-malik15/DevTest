@@ -1,5 +1,11 @@
+import { IEngineerModel } from "./engineer.model";
+import { ICustomerModel } from "./customer.model";
+
 export interface JobModel {
   jobId: number;
-  engineer: string;
+  engineerId: number;
+  customerId: number;
   when: Date;
+  engineer: IEngineerModel;
+  customer: ICustomerModel;
 }

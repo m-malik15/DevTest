@@ -1,43 +1,67 @@
-import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { EngineerService } from '../services/engineer.service';
-import { JobService } from '../services/job.service';
-import { JobModel } from '../models/job.model';
+import { Component, OnInit } from "@angular/core";
+import { NgForm } from "@angular/forms";
+import { EngineerService } from "../services/engineer.service";
+import { JobService } from "../services/job.service";
+import { JobModel } from "../models/job.model";
+import { IEngineerModel } from "../models/engineer.model";
+import { ICustomerModel } from "../models/customer.model";
+import { CustomerService } from "../services/customer.service";
 
 @Component({
-  selector: 'app-job',
-  templateUrl: './job.component.html',
-  styleUrls: ['./job.component.scss']
+  selector: "app-job",
+  templateUrl: "./job.component.html",
+  styleUrls: ["./job.component.scss"],
 })
 export class JobComponent implements OnInit {
-
-  public engineers: string[] = [];
-
+  public engineers: IEngineerModel[] = [];
   public jobs: JobModel[] = [];
+  public customers: ICustomerModel[] = [];
 
   public newJob: JobModel = {
-    jobId: null,
+    jobId: 0,
+    engineerId: null,
+    customerId: null,
+    when: null,
     engineer: null,
-    when: null
+    customer: null,
   };
 
   constructor(
     private engineerService: EngineerService,
-    private jobService: JobService) { }
+    private jobService: JobService,
+    private customerService: CustomerService
+  ) {}
 
   ngOnInit() {
-    this.engineerService.GetEngineers().subscribe(engineers => this.engineers = engineers);
-    this.jobService.GetJobs().subscribe(jobs => this.jobs = jobs);
+    this.getJobs();
+    this.getEngineers();
+    this.getCustomers();
+  }
+
+  getJobs() {
+    this.jobService.getAll().subscribe((jobs) => (this.jobs = jobs));
+  }
+
+  getEngineers() {
+    this.engineerService
+      .getAll()
+      .subscribe((engineers) => (this.engineers = engineers));
+  }
+
+  getCustomers() {
+    this.customerService
+      .getAll()
+      .subscribe((customsers) => (this.customers = customsers));
   }
 
   public createJob(form: NgForm): void {
+    console.log(form);
     if (form.invalid) {
-      alert('form is not valid');
+      alert("form is not valid");
     } else {
-      this.jobService.CreateJob(this.newJob).then(() => {
-        this.jobService.GetJobs().subscribe(jobs => this.jobs = jobs);
+      this.jobService.add(this.newJob).subscribe(() => {
+        this.getJobs();
       });
     }
   }
-
 }

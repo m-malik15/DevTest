@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { JobDetailComponent } from './job-detail.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('JobDetailComponent', () => {
   let component: JobDetailComponent;
@@ -8,6 +10,7 @@ describe('JobDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule,HttpClientModule],
       declarations: [ JobDetailComponent ]
     })
     .compileComponents();
